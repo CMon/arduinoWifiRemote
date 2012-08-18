@@ -1,6 +1,9 @@
 
 #include <RedFly.h>
 #include <RedFlyServer.h>
+#include "localConfig.h"
+
+#define FAIL "fail"
 
 // The pins we want to remote control through wifi
 int redLedPin   =  9;
@@ -8,9 +11,9 @@ int greenLedPin = 10;
 int blueLedPin  = 11;
 
 // brightness levels (0-255)
-int rBrightness = 0;
-int gBrightness = 0;
-int bBrightness = 0;
+uint8_t rBrightness = 0;
+uint8_t gBrightness = 0;
+uint8_t bBrightness = 0;
 char brightness[4] = {0,0,0,0};
 
 // network information
@@ -19,7 +22,7 @@ uint8_t netmask[] = { 255,255,255,  0 }; //netmask
 RedFlyServer server(80);
 
 // buffer
-char * readbuffer;
+char * readbuffer = NULL;
 
 void setup() 
 {
@@ -29,26 +32,37 @@ void setup()
   pinMode(greenLedPin, OUTPUT);
   pinMode(blueLedPin,  OUTPUT);
   
-  //init the WiFi module on the shield
-  // ret = RedFly.init(br, pwr) //br=9600|19200|38400|57600|115200|200000|230400, pwr=LOW_POWER|MED_POWER|HIGH_POWER
-  // ret = RedFly.init(pwr) //9600 baud, pwr=LOW_POWER|MED_POWER|HIGH_POWER
-  // ret = RedFly.init() //9600 baud, HIGH_POWER  uint8_t ret;
   if (RedFly.init() == 0) {
     RedFly.scan();
-    if (RedFly.join("essid", "pass", INFRASTRUCTURE) == 0) {
+    if (RedFly.join(ESSID, WIFI_PASS, INFRASTRUCTURE) == 0) {
       if (RedFly.begin(ip, 0, 0, netmask) == 0) {
         server.begin();
-        analogWrite(greenLedPin, 100);
-        delay(100);
+        analogWrite(greenLedPin, 200);
+        delay(1000);
         analogWrite(greenLedPin, 0);
       }
     }
   }
 }
 
+void fade(int pin, uint8_t from, uint8_t to)
+{
+#ifdef FADE
+  if (from == to) return;
+  for (uint8_t i = from; i <= to; ++i) {
+    analogWrite(pin, i);
+    delay(10);
+  }
+#else
+    analogWrite(pin, to);
+#endif
+}
+
 void loop()
 {
-  char * path;
+  char * path = NULL;
+  uint8_t oldBrightness;
+  
   //listen for incoming clients
   if(server.available()) {
     
@@ -62,16 +76,22 @@ void loop()
         memcpy(brightness, readbuffer+6, 3); // +6 get behind the command (r,g,b)
         int setBrightness = atoi(brightness);
         if (path[0] == 'r') {
+          oldBrightness = rBrightness;
           rBrightness = setBrightness;
+          fade(redLedPin, oldBrightness, rBrightness);
           server.print_P(PSTR("r: "));
         } else if (path[0] == 'g') {
+          oldBrightness = gBrightness;
           gBrightness = setBrightness;
+          fade(greenLedPin, oldBrightness, gBrightness);
           server.print_P(PSTR("g: "));
         } else if (path[0] == 'b') {
+          oldBrightness = bBrightness;
           bBrightness = setBrightness;
+          fade(blueLedPin,  oldBrightness, bBrightness);
           server.print_P(PSTR("b: "));
         } else {
-          server.print_P(PSTR("fail"));
+          server.print_P(PSTR(FAIL));
           break;
         }
         server.print(brightness);
@@ -83,8 +103,4 @@ void loop()
     server.stop();
     server.begin();
   }
-  analogWrite(redLedPin,   rBrightness);
-  analogWrite(greenLedPin, gBrightness);
-  analogWrite(blueLedPin,  bBrightness);
-  delay(1); //stability
 }
