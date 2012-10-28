@@ -13,7 +13,8 @@ int blueLedPin  = 11;
 uint8_t rBrightness = 0;
 uint8_t gBrightness = 0;
 uint8_t bBrightness = 0;
-char brightness[4] = {0,0,0,0};
+char brightness[10] = {0,0, 0,0, 0,0, 0,0, 0,0};
+char tmp[4] = {0,0, 0,0};
 
 // network information
 RedFlyServer server(serverPort);
@@ -79,7 +80,7 @@ void loop()
 
       if (strncmp(readbuffer, "GET /", 5) == 0) {
         path = strtok(readbuffer+5, " "); // +5 get behind /
-        memcpy(brightness, readbuffer+6, 3); // +6 get behind the command (r,g,b)
+        memcpy(brightness, readbuffer+6, 9); // +6 get behind the command (r,g,b)
         int setBrightness = atoi(brightness);
         if (path[0] == 'r') {
           oldBrightness = rBrightness;
@@ -96,6 +97,23 @@ void loop()
           bBrightness = setBrightness;
           fade(blueLedPin,  oldBrightness, bBrightness);
           server.print_P(PSTR("b: "));
+        } else if (path[0] == 'a') {
+          memcpy(tmp, brightness, 3);
+          setBrightness = atoi(brightness);
+          oldBrightness = rBrightness;
+          rBrightness = setBrightness;
+          fade(redLedPin, oldBrightness, rBrightness);
+          memcpy(tmp, brightness+3, 3);
+          setBrightness = atoi(brightness);
+          oldBrightness = gBrightness;
+          gBrightness = setBrightness;
+          fade(greenLedPin, oldBrightness, gBrightness);
+          memcpy(tmp, brightness+6, 3);
+          setBrightness = atoi(brightness);
+          oldBrightness = bBrightness;
+          bBrightness = setBrightness;
+          fade(blueLedPin,  oldBrightness, bBrightness);
+          server.print_P(PSTR("a: "));
         } else {
           server.print_P(PSTR(FAIL));
           break;
