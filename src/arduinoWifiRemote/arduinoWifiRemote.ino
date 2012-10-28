@@ -1,4 +1,3 @@
-
 #include <RedFly.h>
 #include <RedFlyServer.h>
 #include "localConfig.h"
@@ -15,9 +14,6 @@ uint8_t rBrightness = 0;
 uint8_t gBrightness = 0;
 uint8_t bBrightness = 0;
 char brightness[4] = {0,0,0,0};
-
-// network information
-RedFlyServer server(80);
 
 // buffer
 char * readbuffer = NULL;
@@ -47,9 +43,18 @@ void fade(int pin, uint8_t from, uint8_t to)
 {
 #ifdef FADE
   if (from == to) return;
-  for (uint8_t i = from; i <= to; ++i) {
-    analogWrite(pin, i);
-    delay(10);
+  if ( to >= from) {
+    for (uint8_t i = from; i <= to; ++i) {
+      analogWrite(pin, i);
+      delay(10);
+      if ( i == 255 ) break;
+    }
+  } else {
+    for (uint8_t i = from; i >= to; --i) {
+      analogWrite(pin, i);
+      delay(10);
+      if ( i == 0 ) break;
+    }
   }
 #else
     analogWrite(pin, to);
