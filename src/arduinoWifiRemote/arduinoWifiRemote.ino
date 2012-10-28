@@ -17,8 +17,6 @@ uint8_t bBrightness = 0;
 char brightness[4] = {0,0,0,0};
 
 // network information
-uint8_t ip[]      = { 192,168,  1, 31 }; //ip from shield (server)
-uint8_t netmask[] = { 255,255,255,  0 }; //netmask
 RedFlyServer server(80);
 
 // buffer
