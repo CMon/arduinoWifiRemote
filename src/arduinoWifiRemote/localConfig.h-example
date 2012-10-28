@@ -2,3 +2,4 @@
 #define WIFI_PASS "yourPass"
 uint8_t ip[]      = { 192,168,1, ,2 }; //ip from shield (server)
 uint8_t netmask[] = { 255,255,255,0 }; //netmask
+uint8_t serverPort = 80;

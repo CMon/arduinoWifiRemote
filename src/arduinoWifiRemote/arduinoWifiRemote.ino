@@ -15,6 +15,9 @@ uint8_t gBrightness = 0;
 uint8_t bBrightness = 0;
 char brightness[4] = {0,0,0,0};
 
+// network information
+RedFlyServer server(serverPort);
+
 // buffer
 char * readbuffer = NULL;
 
@@ -43,7 +46,7 @@ void fade(int pin, uint8_t from, uint8_t to)
 {
 #ifdef FADE
   if (from == to) return;
-  if ( to >= from) {
+  if ( to > from) {
     for (uint8_t i = from; i <= to; ++i) {
       analogWrite(pin, i);
       delay(10);
