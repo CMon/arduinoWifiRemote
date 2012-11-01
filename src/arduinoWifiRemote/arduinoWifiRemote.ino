@@ -43,7 +43,7 @@ void setup()
   }
 }
 
-void fade(int pin, uint8_t from, uint8_t to)
+void fade(int pin, const uint8_t from, uint8_t to)
 {
 #ifdef FADE
   if (from == to) return;
@@ -99,17 +99,17 @@ void loop()
           server.print_P(PSTR("b: "));
         } else if (path[0] == 'a') {
           memcpy(tmp, brightness, 3);
-          setBrightness = atoi(brightness);
+          setBrightness = atoi(tmp);
           oldBrightness = rBrightness;
           rBrightness = setBrightness;
           fade(redLedPin, oldBrightness, rBrightness);
           memcpy(tmp, brightness+3, 3);
-          setBrightness = atoi(brightness);
+          setBrightness = atoi(tmp);
           oldBrightness = gBrightness;
           gBrightness = setBrightness;
           fade(greenLedPin, oldBrightness, gBrightness);
           memcpy(tmp, brightness+6, 3);
-          setBrightness = atoi(brightness);
+          setBrightness = atoi(tmp);
           oldBrightness = bBrightness;
           bBrightness = setBrightness;
           fade(blueLedPin,  oldBrightness, bBrightness);
