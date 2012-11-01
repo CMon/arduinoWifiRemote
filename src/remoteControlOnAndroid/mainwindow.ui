@@ -62,6 +62,19 @@
      </layout>
     </item>
     <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
      <widget class="QLabel" name="lblPreview">
       <property name="autoFillBackground">
        <bool>true</bool>
@@ -73,51 +86,120 @@
     </item>
     <item>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0" alignment="Qt::AlignHCenter">
+      <item row="1" column="1">
+       <widget class="QLabel" name="lblRedValue">
+        <property name="minimumSize">
+         <size>
+          <width>45</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Panel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Sunken</enum>
+        </property>
+        <property name="text">
+         <string>0</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Red</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" alignment="Qt::AlignHCenter">
+      <item row="1" column="0">
+       <widget class="QSlider" name="hsRed">
+        <property name="maximum">
+         <number>255</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Green</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="2" alignment="Qt::AlignHCenter">
+      <item row="3" column="2">
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Blue</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1" alignment="Qt::AlignHCenter">
-       <widget class="QSlider" name="vsGreen">
+      <item row="2" column="1">
+       <widget class="QLabel" name="lblGreenValue">
+        <property name="minimumSize">
+         <size>
+          <width>45</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Panel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Sunken</enum>
+        </property>
+        <property name="text">
+         <string>0</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLabel" name="lblBlueValue">
+        <property name="minimumSize">
+         <size>
+          <width>45</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Panel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Sunken</enum>
+        </property>
+        <property name="text">
+         <string>0</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QSlider" name="hsGreen">
         <property name="maximum">
          <number>255</number>
         </property>
         <property name="orientation">
-         <enum>Qt::Vertical</enum>
+         <enum>Qt::Horizontal</enum>
         </property>
        </widget>
       </item>
-      <item row="1" column="2" alignment="Qt::AlignHCenter">
-       <widget class="QSlider" name="vsBlue">
-        <property name="maximum">
-         <number>255</number>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" alignment="Qt::AlignHCenter">
-       <widget class="QSlider" name="vsRed">
+      <item row="3" column="0">
+       <widget class="QSlider" name="hsBlue">
         <property name="maximum">
          <number>255</number>
         </property>
         <property name="orientation">
-         <enum>Qt::Vertical</enum>
+         <enum>Qt::Horizontal</enum>
         </property>
        </widget>
       </item>

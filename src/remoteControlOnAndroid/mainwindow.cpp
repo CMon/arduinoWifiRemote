@@ -14,9 +14,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(&accessManager_, SIGNAL(finished(QNetworkReply*)), this, SLOT(enableGui()));
 
-    connect(ui->vsRed,   SIGNAL(valueChanged(int)), this, SLOT(onColorChange()));
-    connect(ui->vsGreen, SIGNAL(valueChanged(int)), this, SLOT(onColorChange()));
-    connect(ui->vsBlue,  SIGNAL(valueChanged(int)), this, SLOT(onColorChange()));
+    connect(ui->hsRed,   SIGNAL(valueChanged(int)), this, SLOT(onColorChange()));
+    connect(ui->hsGreen, SIGNAL(valueChanged(int)), this, SLOT(onColorChange()));
+    connect(ui->hsBlue,  SIGNAL(valueChanged(int)), this, SLOT(onColorChange()));
     onColorChange();
 }
 
@@ -41,18 +41,23 @@ void MainWindow::enableGui()
 
 void MainWindow::on_pbSetSelection_clicked()
 {
-    const int red   = ui->vsRed->value();
-    const int green = ui->vsGreen->value();
-    const int blue  = ui->vsBlue->value();
+    const int red   = ui->hsRed->value();
+    const int green = ui->hsGreen->value();
+    const int blue  = ui->hsBlue->value();
 
     setColor(QColor(red, green, blue));
 }
 
 void MainWindow::onColorChange()
 {
-    const int red   = ui->vsRed->value();
-    const int green = ui->vsGreen->value();
-    const int blue  = ui->vsBlue->value();
+    const int red   = ui->hsRed->value();
+    const int green = ui->hsGreen->value();
+    const int blue  = ui->hsBlue->value();
+
+    ui->lblRedValue->setText(QString::number(red));
+    ui->lblGreenValue->setText(QString::number(green));
+    ui->lblBlueValue->setText(QString::number(blue));
+
     color_ = QColor(red, green, blue);
 
     QPalette palette = ui->lblPreview->palette();
@@ -64,9 +69,9 @@ void MainWindow::onColorChange()
 
 void MainWindow::disableGui(bool disable)
 {
-    ui->vsRed->setDisabled(disable);
-    ui->vsGreen->setDisabled(disable);
-    ui->vsBlue->setDisabled(disable);
+    ui->hsRed->setDisabled(disable);
+    ui->hsGreen->setDisabled(disable);
+    ui->hsBlue->setDisabled(disable);
 
     ui->pbRed->setDisabled(disable);
     ui->pbGreen->setDisabled(disable);
@@ -88,6 +93,11 @@ void MainWindow::setColor(const QColor &color)
     QString request;
     request.sprintf("%sa%03d%03d%03d", baseUrl_.toLatin1().data(), color.red(), color.green(), color.blue());
     accessManager_.get(QNetworkRequest(QUrl(request)));
+
+    ui->hsRed->setValue(color.red());
+    ui->hsGreen->setValue(color.green());
+    ui->hsBlue->setValue(color.blue());
+
     disableGui(true);
 }
 
