@@ -1,2 +1,3 @@
 src/arduinoWifiRemote/localConfig.h
-
+*.pro.user
+android/
